@@ -6,13 +6,14 @@ from .serializers import (
     DocumentSerializer,
     NotificationSerializer
 )
+from .permissions import IsAdminOrReadOnly, IsOwnerOrAdmin
 
 # Create your views here.
 
 class ComplianceRequirementViewSet(viewsets.ModelViewSet):
     queryset = ComplianceRequirement.objects.all()
     serializer_class = ComplianceRequirementSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrAdmin]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -20,9 +21,9 @@ class ComplianceRequirementViewSet(viewsets.ModelViewSet):
 class DocumentViewSet(viewsets.ModelViewSet):
     queryset = Document.objects.all()
     serializer_class = DocumentSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrAdmin]
 
 class NotificationViewSet(viewsets.ModelViewSet):
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrAdmin]
